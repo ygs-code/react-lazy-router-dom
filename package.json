@@ -1,6 +1,6 @@
 {
     "name": "react-lazy-router-dom",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "description": "This is a routes are loaded lazily",
     "main": "dist/cjs/index.js",
     "scripts": {
