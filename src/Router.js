@@ -1,11 +1,12 @@
+import PropTypes from "prop-types";
 import {
-  createContext,
+  Children,
   Component,
-  createElement,
-  Children
+  createContext,
+  createElement
   // isValidElement
 } from "react";
-import PropTypes from "prop-types";
+
 var createNamedContext = function createNamedContext(name) {
   var context = createContext();
   context.displayName = name;
@@ -37,13 +38,14 @@ class Router extends Component {
   }
   componentDidMount() {
     this._isMounted = true;
+    const { staticContext, history } = this.props;
 
     if (this.unlisten) {
       this.unlisten();
     }
 
-    if (!this.props.staticContext) {
-      this.unlisten = this.props.history.listen(({ location }) => {
+    if (!staticContext) {
+      this.unlisten = history.listen(({ location }) => {
         if (this._isMounted) {
           this.setState({
             location: location
@@ -75,7 +77,8 @@ class Router extends Component {
     };
   };
   render() {
-    const { children, staticContext, loading, history } = this.props;
+    const { children, staticContext, loading, history, routesComponent } =
+      this.props;
     const { location } = this.state;
     /* eslint-disable   */
     return createElement(RouterContext.Provider, {
@@ -83,7 +86,8 @@ class Router extends Component {
         history,
         location,
         staticContext,
-        loading
+        loading,
+        routesComponent
       },
       children: children ? Children.only(children) : null
     });
@@ -94,6 +98,9 @@ class Router extends Component {
 Router.propTypes = {
   history: PropTypes.object.isRequired,
   staticContext: PropTypes.object,
+  /* eslint-disable   */
+  routesComponent: PropTypes.array,
+  /* eslint-enable   */
   loading: function (props, propName, componentName) {
     if (!props[propName]) {
       return new Error(
@@ -110,4 +117,4 @@ Router.propTypes = {
   }
 };
 
-export { Router, RouterContext as __RouterContext };
+export { RouterContext as __RouterContext, Router };
